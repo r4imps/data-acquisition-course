@@ -59,6 +59,8 @@ python3 -m venv .venv
 
 Püsivas tööpunktis lisa `--dmm-v TEGELIK_PINGE` (asenda mõõdetud arvuga). See on käsitsi sisestatud G5 sõlme võrdluspinge, mitte iga proovi mõõdetud pinge. `dmm_recorded_utc` on logijasse sisestamise aeg; tegelik multimeetri mõõtmisaeg ja meetod märgi töölehele. Ära lisa üht püsipinge näitu muutuva impulsi jooksule.
 
+- 25.10.26 parandus: ülaltoodud käsud vajavad nüüd lisaks kas `--dmm-v TEGELIK_PINGE` või `--no-dmm`; ilma selleta logija ei käivitu. Logija keeldub ka jooksust, mille `config`/`condition`/`trial` on samas kaustas juba olemas. `adc_clipped` märgib vaikimisi koodi `≤ 50` või `≥ 4045` (`--clip-low`/`--clip-high`), mitte ainult `0`/`4095`. Uus näide: [`notebooks/README.md`](../notebooks/README.md).
+
 Järgmise jooksu lisamiseks samasse CSV-sse kasuta `--append`, uut `--trial` numbrit ning õiget `--config raw` või `--config opamp`. Olemasolevat faili ilma `--append` parameetrita ei kirjutata üle. Ühine CSV on lubatud ainult koos iga rea `config`, `run_id`, `condition` ja `trial` väljadega. Füüsiliselt vaheta ühendusi ainult väljalülitatud toitega.
 
 CSV veerud:
@@ -68,6 +70,8 @@ t_ms,adc,p_kpa,pump,config,run_id,seq,missed,voltage_v,dmm_reference_v,dmm_recor
 ```
 
 `p_kpa`, `voltage_v` ja `pump` jäävad tühjaks: puuduvad selle seadme ja kummagi konfiguratsiooni kinnitatud teisendus ning pumba tagasiside. Tühi pump ei tähenda `off`. `adc_clipped` märgib ainult koodi 0 või 4095, mitte diagnoosi ega elektrilist ohutust. Kõik jooksud saavad kõrvalfaili `.runs.jsonl`, kus on kestus, ridade arv, sagedus, min/max intervall ja vead. Poolik jooks säilib tõendina; ära kasuta seda vaikimisi kehtiva võrdlusena. Logija lõpetab vigase raami, vale konfiguratsiooni, puuduva proovi või 500 ms vaikuse korral; pumba olekut ta ei muuda. Väljumiskood 0 nõuab lõppenud jooksu, null vahelejäänud intervalli ning 9–11 ms proovivahesid. Tegelik USB läbilase ja 100 Hz tuleb riistvaral kontrollida.
+
+- 25.10.26 parandus: `adc_clipped` märgib nüüd koodi `≤ --clip-low` (vaikimisi `50`) või `≥ --clip-high` (vaikimisi `4045`); 25.10 jaguriga mõõtmistes jäi LM358 väljund `14…21` koodile ja vana `0`/`4095` reegel seda ei märganud. Lävendid ja märgitud ridade arv on `.runs.jsonl` failis.
 
 ## Tarkvarakontroll
 

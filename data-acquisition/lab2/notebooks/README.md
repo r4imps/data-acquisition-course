@@ -89,6 +89,22 @@ Analüüs kontrollib skeemi, ADC piire, metaandmete püsivust, järjestust ja aj
 
 ADC statistika sisaldab keskmist, valimi standardhälvet (`ddof=1`), min/max, tippude vahet, keskmisest eemaldatud RMS-i ja äärmuslike koodide arvu. Kogu impulsi standardhälve sisaldab signaali muutust; seda ei tohi nimetada platoo müraks. Graafik eraldab `raw` ja `opamp`, kumbki jooks säilitab oma ajatelje.
 
+25.10.26 täiendus: logija nõuab nüüd igas jooksus `--dmm-v <selle jooksu näit>` või `--no-dmm` ning keeldub, kui sama `config`/`condition`/`trial` on samas kaustas juba logitud (25.10 CSV-desse jäid 24.10 metaandmed). `adc_clipped` märgib nüüd põranda ja lae: vaikimisi kood `≤ 50` või `≥ 4045`, muudetav `--clip-low`/`--clip-high`; lävendid salvestuvad `.runs.jsonl` faili. CSV veerud ei muutunud. Uus käivitusnäide, `lab2` kaustast:
+
+```powershell
+.\.venv\Scripts\python.exe src/python/logger.py --port COM3 --config opamp --csv data/opamp_v2.csv --condition atmosphere --trial 1 --duration 10 --dmm-v <E35 näit> --electrical-check-confirmed
+.\.venv\Scripts\python.exe src/python/logger.py --port COM3 --config opamp --csv data/opamp_v2.csv --condition full_suction --trial 2 --duration 10 --no-dmm --append --electrical-check-confirmed
+```
+
+25.10.26 täiendus: sama impulsi `raw`/`opamp` võrdlus ühe käsuga (`src/python/compare.py`): spektrid samadel telgedel (kPa²/Hz), platoo müra standardhälve ja SNR, Pa ühe ADC sammu kohta, kasutatud ADC vahemiku osa, põranda/lae proovid ning pooliku haarde eristamise aeg, kui `<CSV nimi>.events.csv` märgib rea `phase=half_grip` koos `atom_t_ms` väärtusega (Labori 1 sündmusfaili kuju). Rõhuks teisendamine kasutab Atomi lehe nelja konstanti (`--raw-cal`/`--opamp-cal`). Ilma nendeta kasutatakse MPX5700AP andmelehe ülekandefunktsiooni ning antud `--vs`, `--opamp-gain`, `--opamp-vref` ja `--opamp-divider` väärtusi. Platoo valitakse automaatselt, kui `--raw-plateau`/`--opamp-plateau` puudub; valitud aknad on `summary.json`-is ja `pressure_time.png`-l. Kontrolli neid. Pooliku haarde lävend (`--half-grip-kpa`) on meeskonna kriteerium; ilma selleta aega ei arvutata.
+
+```powershell
+.\.venv\Scripts\python.exe src/python/compare.py data/raw_pulse.csv data/opamp_v2.csv --out notebooks/results-pulse1 --opamp-cal <volts_per_count> <voltage_offset_v> <kpa_per_volt> <pressure_offset_kpa> --vs <mõõdetud anduri toide> --raw-baseline 0,1 --opamp-baseline 0,1
+.\.venv\Scripts\python.exe src/python/calibrate.py --atmosphere <Vin> <Vref> <Vout> --full-suction <Vin> <Vref> <Vout> --full-blowing <Vin> <Vref> <Vout> --vs <mõõdetud anduri toide> --adc-atmosphere <ADC keskmine> --adc-full-suction <ADC keskmine>
+```
+
+`calibrate.py` väljastab võimenduse, nihke ja Atomi lehe väljad `volts_per_count`, `voltage_offset_v`, `kpa_per_volt`, `pressure_offset_kpa`. kPa tundlikkus tuleb andmelehelt, null on mõõdetud atmosfääripunktis; see ei ole referentsrõhuga kalibratsioon. 25.10 jaguriga failide puhul lisa `--opamp-divider 0.5`; nende vaakumjooks algab põrandal, seega anna aknad käsitsi.
+
 ## Kalibratsioon, SNR ja spektrid
 
 Need arvutused on valikulised. Lisa `--plan TEGELIK_PLAAN.json` alles pärast andmete ja katsemärkmete kontrolli. Plaani struktuur (sümbolid tuleb asendada kontrollitud arvude ja päris jooksu ID-dega; see pole käivitatav kalibratsioon):
