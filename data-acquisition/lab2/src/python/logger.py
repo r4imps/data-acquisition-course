@@ -13,6 +13,7 @@ import uuid
 FIELDS = ["t_ms", "adc", "p_kpa", "pump", "config", "run_id", "seq", "missed",
           "voltage_v", "dmm_reference_v", "dmm_recorded_utc", "condition", "trial", "adc_clipped"]
 CONFIGS = {"raw", "opamp"}
+CLIP_DEFAULT = (50, 4045)  # LM358 output sat at 14..21 codes on 25.10; 0/4095 alone missed it
 
 
 def integer(value, lo, hi):
@@ -31,10 +32,12 @@ def decode(line):
 
 
 class Rows:
-    def __init__(self, config, run):
+    def __init__(self, config, run, clip=(0, 4095)):
         if config not in CONFIGS or not re.fullmatch(r"[0-9a-f]{16}",run):
             raise ValueError("invalid config/run")
-        self.config, self.run = config, run
+        if not 0 <= clip[0] < clip[1] <= 4095:
+            raise ValueError("invalid clip thresholds")
+        self.config, self.run, self.clip = config, run, tuple(clip)
         self.last_t = None
         self.last_seq = -1
         self.last_missed = 0
@@ -65,7 +68,7 @@ class Rows:
         self.count+=1
         return dict(t_ms=obj["t"],adc=obj["adc"],p_kpa="",pump="",config=self.config,
                     run_id=self.run,seq=obj["seq"],missed=obj["missed"],voltage_v="",
-                    adc_clipped=int(obj["adc"] in (0,4095)))
+                    adc_clipped=int(obj["adc"]<=self.clip[0] or obj["adc"]>=self.clip[1]))
 
     def summary(self):
         return dict(rows=self.count,elapsed_ms=self.elapsed,missed=self.last_missed,
@@ -117,9 +120,12 @@ def wait_started(port, config, run, clock=time.monotonic):
 
 
 def capture(port, writer, handle, args, run, clock=time.monotonic):
-    rows=Rows(args.config,run)
+    clip=(getattr(args,"clip_low",0),getattr(args,"clip_high",4095))
+    rows=Rows(args.config,run,clip)
+    clipped=0
     summary=dict(run_id=run,config=args.config,condition=args.condition,trial=args.trial,
                  calibrated=False,status="partial",dmm_reference_v=args.dmm_v,
+                 clip_low=clip[0],clip_high=clip[1],
                  dmm_recorded_utc=datetime.now(timezone.utc).isoformat() if args.dmm_v is not None else "")
     try:
         port.reset_input_buffer()
@@ -140,6 +146,7 @@ def capture(port, writer, handle, args, run, clock=time.monotonic):
                        dmm_recorded_utc=summary["dmm_recorded_utc"],condition=args.condition,trial=args.trial)
             writer.writerow(row)
             handle.flush()
+            clipped+=row["adc_clipped"]
             if rows.elapsed>=round(args.duration*1000):
                 summary["status"]="complete"
                 break
@@ -152,8 +159,33 @@ def capture(port, writer, handle, args, run, clock=time.monotonic):
             port.write(b'{"cmd":"measure_stop"}\n')  # never Lab 1's actuator "stop"
         except Exception:
             pass
-        summary.update(rows.summary())
+        summary.update(rows.summary(),clipped_rows=clipped)
     return summary
+
+
+def used_trials(csv_path):
+    """(config, condition, trial) already in the target CSV or its sibling logger CSVs/sidecars."""
+    folder=Path(csv_path).resolve().parent
+    used={}
+    for path in sorted(folder.glob("*.csv")):
+        try:
+            with path.open(newline="",encoding="utf-8") as handle:
+                reader=csv.DictReader(handle)
+                if reader.fieldnames != FIELDS:
+                    continue  # Lab 1 or other CSVs carry no trial metadata
+                for row in reader:
+                    used.setdefault((row["config"],row["condition"],row["trial"]),path.name)
+        except (OSError,UnicodeError,csv.Error):
+            continue
+    for path in sorted(folder.glob("*.csv.runs.jsonl")):
+        try:
+            for line in path.read_text(encoding="utf-8").splitlines():
+                record=json.loads(line)
+                key=(record.get("config"),record.get("condition"),str(record.get("trial")))
+                used.setdefault(key,path.name)
+        except (OSError,UnicodeError,ValueError):
+            continue
+    return used
 
 
 def local_port(name):
@@ -187,7 +219,11 @@ def parse_args(argv=None):
     p.add_argument("--condition",required=True,help="e.g. atmosphere, calibration, pulse")
     p.add_argument("--trial",type=int,required=True)
     p.add_argument("--duration",type=float,default=10)
-    p.add_argument("--dmm-v",type=float,help="manually measured steady G5-node reference, not a time-series sensor")
+    dmm=p.add_mutually_exclusive_group(required=True)
+    dmm.add_argument("--dmm-v",type=float,help="G5-node voltage measured for THIS run, not a time-series sensor")
+    dmm.add_argument("--no-dmm",action="store_true",help="no multimeter reading for this run")
+    p.add_argument("--clip-low",type=int,default=CLIP_DEFAULT[0],help="adc_clipped=1 at or below this code (floor)")
+    p.add_argument("--clip-high",type=int,default=CLIP_DEFAULT[1],help="adc_clipped=1 at or above this code (ceiling)")
     p.add_argument("--append",action="store_true")
     p.add_argument("--electrical-check-confirmed",action="store_true",required=True)
     a=p.parse_args(argv)
@@ -199,11 +235,22 @@ def parse_args(argv=None):
         p.error("duration must be 1..3600 seconds")
     if a.dmm_v is not None and (not math.isfinite(a.dmm_v) or not 0<=a.dmm_v<=3.1):
         p.error("G5 reference outside 0..3.1 V: disconnect; record unsafe voltages in bench notes")
+    if not 0<=a.clip_low<a.clip_high<=4095:
+        p.error("need 0 <= --clip-low < --clip-high <= 4095")
     return a
 
 
 def main(argv=None):
     args=parse_args(argv)
+    previous=used_trials(args.csv).get((args.config,args.condition,str(args.trial)))
+    if previous:
+        # 25.10: three runs silently reused 24.10's condition/trial/DMM metadata
+        print(f"{args.config}/{args.condition}/trial {args.trial} already logged in {previous}; "
+              "use a new --trial (and a fresh --dmm-v or --no-dmm)",file=sys.stderr)
+        return 1
+    print(f"run: config={args.config} condition={args.condition} trial={args.trial} "
+          f"dmm_v={'none' if args.dmm_v is None else args.dmm_v} "
+          f"clip<={args.clip_low}|>={args.clip_high}",file=sys.stderr)
     handle=None
     run=uuid.uuid4().hex[:16]
     summary=dict(status="partial",run_id=run,config=args.config,rows=0)
@@ -226,6 +273,8 @@ def main(argv=None):
     with Path(str(args.csv)+".runs.jsonl").open("a",encoding="utf-8") as metadata:
         metadata.write(json.dumps(summary,allow_nan=False)+"\n")
     print(json.dumps(summary,indent=2,allow_nan=False))
+    if summary.get("clipped_rows"):
+        print(f"WARNING: {summary['clipped_rows']} rows at ADC floor/ceiling; stage saturated?",file=sys.stderr)
     return 0 if summary["status"]=="complete" and summary.get("timing_ok",False) else 1
 
 

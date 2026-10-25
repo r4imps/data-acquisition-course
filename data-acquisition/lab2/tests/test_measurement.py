@@ -9,6 +9,8 @@ import subprocess
 import tempfile
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
+import contextlib
 
 LAB=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("da2_logger",LAB/"src/python/logger.py")
@@ -69,6 +71,45 @@ class MeasurementTests(unittest.TestCase):
             self.assertEqual(row["adc_clipped"],1)
             self.assertEqual(row["p_kpa"],"")
 
+    def test_configurable_floor_and_ceiling_flag(self):
+        for adc,flag in ((14,1),(50,1),(51,0),(4044,0),(4045,1)):
+            row=logger.Rows("opamp",RUN,(50,4045)).accept(sample(adc=adc,config="opamp"))
+            with self.subTest(adc=adc): self.assertEqual(row["adc_clipped"],flag)
+        self.assertEqual(logger.Rows("raw",RUN).accept(sample(adc=14))["adc_clipped"],0)  # legacy rule
+        for clip in ((50,50),(-1,4095),(0,4096)):
+            with self.assertRaises(ValueError): logger.Rows("raw",RUN,clip)
+
+    def test_dmm_choice_required_each_run(self):
+        base=["--port","COM3","--config","opamp","--csv","x.csv","--condition","atmosphere",
+              "--trial","1","--electrical-check-confirmed"]
+        with contextlib.redirect_stderr(io.StringIO()):
+            for extra in ([],["--dmm-v","0.5","--no-dmm"],["--no-dmm","--clip-low","100","--clip-high","90"]):
+                with self.subTest(extra=extra),self.assertRaises(SystemExit): logger.parse_args(base+extra)
+        a=logger.parse_args(base+["--no-dmm"])
+        self.assertIsNone(a.dmm_v); self.assertEqual((a.clip_low,a.clip_high),logger.CLIP_DEFAULT)
+
+    def test_reused_condition_trial_refused_before_port_opens(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old=Path(tmp)/"opamp_vacum_test.csv"
+            with old.open("w",newline="") as handle:
+                writer=csv.DictWriter(handle,fieldnames=logger.FIELDS); writer.writeheader()
+                row=logger.Rows("opamp",RUN).accept(sample(config="opamp"))
+                row.update(dmm_reference_v=0.19,dmm_recorded_utc="x",condition="test_signal",trial=1)
+                writer.writerow(row)
+            Path(tmp,"other.csv.runs.jsonl").write_text(json.dumps(dict(config="raw",condition="pulse",trial=3))+"\n")
+            Path(tmp,"lab1.csv").write_text("t_ms,adc,p_kpa,pump\n1,2,,0\n")
+            used=logger.used_trials(Path(tmp)/"new.csv")
+            self.assertIn(("opamp","test_signal","1"),used); self.assertIn(("raw","pulse","3"),used)
+            args=["--port","COM3","--csv",str(Path(tmp)/"opamp_pressure_test.csv"),"--duration","10",
+                  "--dmm-v","0.19","--electrical-check-confirmed"]
+            for config,condition,trial in (("opamp","test_signal","1"),("raw","pulse","3")):
+                with self.subTest(trial=trial),patch.object(logger,"open_atom") as port,                         contextlib.redirect_stderr(io.StringIO()) as err:
+                    self.assertEqual(logger.main(args+["--config",config,"--condition",condition,"--trial",trial]),1)
+                    port.assert_not_called(); self.assertIn("already logged",err.getvalue())
+            self.assertFalse((Path(tmp)/"opamp_pressure_test.csv").exists())
+            # same pulse in the other config stays allowed (raw/opamp pair)
+            self.assertNotIn(("raw","test_signal","1"),used)
+
     def test_missing_duplicate_and_backwards_time(self):
         for next_sample in (sample(10,0),sample(10,2),sample(0,1),sample(600,1)):
             rows=logger.Rows("raw",RUN); rows.accept(sample())
@@ -124,6 +165,7 @@ class MeasurementTests(unittest.TestCase):
         self.assertEqual(summary["rate_hz"],100)
         self.assertTrue(summary["timing_ok"])
         self.assertEqual(data[0]["dmm_reference_v"],"1.234")
+        self.assertEqual((summary["clip_low"],summary["clip_high"],summary["clipped_rows"]),(0,4095,0))
         self.assertEqual(data[0]["voltage_v"],"")
         self.assertEqual(json.loads(port.writes[0])["cmd"],"measure_start")
         self.assertEqual(json.loads(port.writes[-1])["cmd"],"measure_stop")
