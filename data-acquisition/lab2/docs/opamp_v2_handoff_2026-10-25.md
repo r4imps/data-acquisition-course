@@ -92,6 +92,9 @@ G5 hoida lahti kuni sammuni 5. Must mõõteots D29-l.
    .\.venv\Scripts\python.exe src/python/logger.py --port COM3 --config opamp --csv data/opamp_v2.csv --condition full_blowing --trial 3 --duration 10 --append --electrical-check-confirmed
    ```
 
+   - 25.10.26 parandus: uuendatud logija nõuab igas jooksus kas `--dmm-v <selle jooksu näit>` või `--no-dmm`; teine ja kolmas käsk vajavad üht neist. Sama `config`/`condition`/`trial` kordamisest logija keeldub. Vt [`notebooks/README.md`](../notebooks/README.md).
+   - 25.10.26 täiendus: kolme multimeetripunkti arvutuse jaoks on `src/python/calibrate.py`, mis väljastab ka Smart Solutionsi Atomi lehe konstandid. Meeskonna 2. versiooni Falstadi mudel on failis [`opamp_design.md`](opamp_design.md#25102026--meeskonna-2-versiooni-falstadi-mudel).
+
 6. Kanna parandatud astme tulemused faili [`opamp_design.md`](opamp_design.md)
    ("Parandatud versiooni kolme punkti mõõtmine") ja lisa päevikukanne.
    Jaguriga mõõtmised jäävad esimese versiooni tulemustena alles.
