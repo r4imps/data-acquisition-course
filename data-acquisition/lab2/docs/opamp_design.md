@@ -373,3 +373,52 @@ Mõõdetud väljundpinge erines ideaalse skeemi arvutusest ligikaudu 21 mV. Erin
 AtomS3R GPIO5 ADC testis saime 1001 lugemit ligikaudu 10 sekundi jooksul, diskreetimissagedusega umbes 100 Hz.
 
 See oli üks potentsiomeetritega kontrollitud tööpunkt. Katse ei kinnita veel kogu väljundvahemiku lineaarsust, rõhu kalibratsiooni ega võimendusastme lõplikku sobivust MPX5700AP anduriga.
+
+## 25.10.2026 — meeskonna 2. versiooni Falstadi mudel
+
+Mudel kordab [25.10 üleandmisdokumendis](opamp_v2_handoff_2026-10-25.md) kirjeldatud plaati: LM358N kanal A on mitteinverteeriv aste (`Vin` A+ sisendil, `Rf` väljundist A−-le, `Rref` A−-st puhverdatud viitele), kanal B on viitepinge puhver, puhvri väljundist on `4,7 kΩ` allatõmme GND-sse ja A väljundist läheb G5-le jadatakisti. **See on mudel, mitte mõõtetulemus.** Mõõdetud väärtused jäävad üleandmisdokumenti ja selle faili mõõtetabelitesse.
+
+- [Falstadi eksport](falstad_v2_team_circuit.txt) (**File → Import From Text**) ja [skeemipilt (SVG)](falstad_v2_team_circuit.svg).
+- [Muudetav veebiskeem](https://www.falstad.com/circuit/circuitjs.html?ctz=DwYwlgTgBAZgvAIgIwKgFwM6IAwDpsEECsqYIiSeATAVQOx0DM2AHFQGwCcndqIARoiK8oAB0EIi2VADcIQ1AFtMQgKYBaJCgB8AKChRgAQygAPRABZO7KFQvYo7e7fup4CaVEVGFXsDlQAcx9kQgIEAHo9A2AAdzNLJ1s7KCsbKjs3AKj9Q3jzBAskjItUpKR2T3dpHJjoAqLSiocnB2asj1R5UOxXWryEhFaoZsdnOyrs6MN6xGZSkrKFzNgAqG6WIkpI6eNB0fmoQ-mOz29fRX9OqGCKMJrd-Lneo5fDqiJ2U53cuMH3z6vZYWb79P4FUZUFgsEaVWyfUGPfZwj42AFfVadMEAJWRDkYNCg1iONG+UFi1SURlMMhwuAsLB+dX+b1ZpXsk2u3QsdHCYMCLPZBCBqQJiN+T0KxNRqWJjEYGMpOMGaSOCtlNg5ZIpa28NLpILBsyG42cdHYMImZO68r5uwA8oNzZbnCwCS5OZ4MOQsQ7BsNRrympUyd6pr9TCqYQyoEQ2LGUJivVckCD0KpEABZVSqDAAawA9gA7IsmKi4KAyVQQDBgAvF+G4Si4DhQAAUABlM4w4wA5KAAQSgAGooAAhMQAVwAFlWIABKCuZycAE1UABsADR+NBoVReACvB73aEn69UiknGFwTMMkYaMLoVCgdCIz9foZTVFQe8Q2JgIzYJuLx5oAlcCHgea6niuyRNngUDYhAqgASwm5bFAYFQL2ACSmbYb2A4Dh2vYAKLtuwaFIBBUGriOthQAA6yMGHgUWYCXPOADcUAACr2gAIvaABcUCZkYea1oo1FGPwUDrkY05oGAUAAD-TqoRYrkYp7rmgN5gvelgwsSLDsM+3CfhQ37pogABSRhaWg4lgBgSlQAA4kQUCqLu+6MJujAsSJ2JGOxBbptpG7booR5oN4TkVgO67yWgB6KIo+4WJudBBVAbGXDIAAnhUQKe15QPaojqEYiiiFAYBrkYRjrkW+7YIAZAReQAatuXY9jCrUbmuMj1uuk5iGAkBGEWgSTmg3nKYoBZrslOYQGA+m7IZyBom+RzsFRPYkEmqC1lZP4ZggXVIQB65gJOs3QEBMZde2RaFQ1qjcWOlDYAA0nRVGYdORgQONRgYBpjm0c1d15kYwTzrewDbRY7po8+TheWjx2UlAZ3INZv5XWARZQM9DivW2B6iKIqgAFYHuNmYAAoABrCAQA4s3lH1rkjBlOi8qalOaVGpiIeME0gROXV1BZze2ADCHAC1tTosMCUAsMKGSS2s0uy4gnnI9tBIODQMKMBYz5UFolmExdf43abgxvm0FilEQ7oSw7MtOwg-6uwU5v7VbRClIwdCJlLX4B1lOVgcHiAWhbKTR8s+vXIbAf+YFSc5MAETgBAehAA). Link sisaldab kogu skeemi ise; lühilinki ei loodud.
+
+| Element | Mudelis | Allikas ja olek |
+|---|---:|---|
+| `Rf` | `10,04 kΩ` | Mõõdetud 22.10 |
+| `Rref` | `8,51 kΩ` | **Nimiväärtus**: `6,51 kΩ` (mõõdetud 22.10) + `2 × 1 kΩ` nimi. Ahelas mõõdetud `7,93 kΩ` sisaldab rööpteid. TODO: Maksim mõõdab lahti ühendatult; seejärel muuda failis `r="8510"` |
+| Jadatakisti G5 ette | `3,3 kΩ` | Raimo teatel 25.10 vahetatud; väärtus mõõtmata. TODO: Raimo kinnitab |
+| Allatõmme puhvri väljundist | `4,7 kΩ` | Nimiväärtus |
+| `Vref` liugur | `0,48 V` allikas | Abiarvutuse näide (üleandmine, punkt 4). B100K ja `1 kΩ` toiteharu on asendatud ideaalse allikaga |
+| `Vin` | `0,40 V` (muudetav) | Õppejõu MPX5700AP näide, mitte meie mõõtetulemus |
+| Op-ampid | ideaalsed, `0…5 V`, avatud ahela võimendus `100000` | Simulatsioonieeldus, nagu esimeses versioonis |
+
+### Simulatsiooni kontroll
+
+Nimiväärtustega `A = 1 + 10,04/8,51 ≈ 2,1798`, seega `Vout = 2,1798 × Vin − 1,1798 × Vref`.
+
+| Näite `Vin` | Arvutatud `Vout` | Falstadi `Vout` = G5 |
+|---:|---:|---:|
+| `0,40 V` | `0,3056 V` | `0,3056 V` |
+| `0,85 V` | `1,2865 V` | `1,2865 V` |
+| `1,56 V` | `2,8342 V` | `2,8341 V` |
+
+Falstadi näidud on loetud simulaatori elementide pingetest. G5 sõlmes on sama pinge mis `Vout`, sest mudelis ei ole ADC sisendil koormust ja jadatakistil ei teki pingelangu.
+
+### Viitepinge puhvri voolubilanss (hinnang)
+
+A− sõlm järgib `Vin`-i, seega voolab `Rref` kaudu viitesõlme vool `(Vin − Vref)/Rref`. Allatõmme viib sõlmest ära `Vref/4,7 kΩ ≈ 102,1 µA`. Puhver peab andma või neelama vahe:
+
+| Näite `Vin` | `Rref` kaudu viitesõlme | Puhvri vool |
+|---:|---:|---|
+| `0,40 V` | `−9,4 µA` | annab `111,5 µA` |
+| `0,85 V` | `+43,5 µA` | annab `58,6 µA` |
+| `1,56 V` | `+126,9 µA` | **neelab `24,8 µA`** |
+
+Falstadi voolud on samad. Ideaalne op-amp neelab voolu piiranguta, päris LM358 aga maa lähedal vaid umbes `12…50 µA` ([TI LM358 andmeleht](https://www.ti.com/lit/ds/symlink/lm358.pdf)). Täis puhumisel jääb puhver seega piiri lähedale. Just seda kontrollib üleandmisdokumendi punkt 2 (J27 püsivus täis puhumisel). Kui `3,3 kΩ` lisatakse rööbiti `4,7 kΩ`-ga (`≈ 1,94 kΩ`), viib allatõmme ära `≈ 247,6 µA` ja puhver annab kõigis kolmes punktis voolu. See on arvutus nimiväärtustega, mitte mõõtmine. `Rref` ja `Vref` mõõdetud väärtustega tuleb arvutust korrata.
+
+### Mida mudel ei näita
+
+- LM358 väljundulatust, neeldevoolu piiri ega madala otsa mittelineaarsust.
+- ESP32 ADC sisendi diskreetimiskondensaatorit ja jadatakisti mõju proovivõtul.
+- Päris toitepinget (H26); mudelis on `5 V` eeldus.
+
+Kolme punkti mõõtmise järel arvutab `src/python/calibrate.py` mõõdetud `Vin`, `Vref` ja `Vout` põhjal võimenduse, nihke ja Smart Solutionsi Atomi lehe kalibratsioonikonstandid. Kasutusnäide on failis [`notebooks/README.md`](../notebooks/README.md).

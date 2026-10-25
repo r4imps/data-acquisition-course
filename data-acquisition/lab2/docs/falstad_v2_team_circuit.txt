@@ -1,0 +1,32 @@
+<cir f="1" ts="0.000005" ic="10.20027730826997" cb="57" pb="50" vr="5" mts="5e-11">
+  <a x="496 240 640 240" f="0" ma="5" mi="0" ga="100000"/>
+  <w x="464 224 496 224" f="0"/>
+  <w x="464 224 464 160" f="0"/>
+  <r x="464 160 640 160" f="0" r="10040"/>
+  <w x="640 160 640 240" f="0"/>
+  <r x="304 224 464 224" f="0" r="8510"/>
+  <a x="160 304 304 304" f="0" ma="5" mi="0" ga="100000"/>
+  <w x="304 304 304 256" f="0"/>
+  <w x="304 256 304 224" f="0"/>
+  <w x="160 288 160 256" f="0"/>
+  <w x="160 256 304 256" f="0"/>
+  <R x="160 320 96 320" f="0" wf="0" maxv="0.48"/>
+  <r x="304 304 304 400" f="0" r="4700"/>
+  <g x="304 400 304 432" f="0"/>
+  <w x="496 256 496 336" f="0"/>
+  <R x="496 336 496 400" f="0" wf="0" maxv="0.4"/>
+  <r x="640 240 768 240" f="0" r="3300"/>
+  <O x="768 240 832 240" f="0" sc="0"/>
+  <O x="640 160 704 160" f="0" sc="0"/>
+  <x x="48 48 900 48" f="0" si="14" te="Meeskonna 2. versioon 25.10.26 (LM358N A + B puhver). Mudel, mitte mõõtetulemus."/>
+  <x x="48 72 900 72" f="0" si="12" te="Rf 10,04 kΩ mõõdetud 22.10. Rref 8,51 kΩ NIMINAALNE (6,51 mõõdetud + 2 × 1 kΩ nimi); TODO: Maksim mõõdab lahti ühendatult."/>
+  <x x="48 96 900 96" f="0" si="12" te="Jadatakisti G5 ette 3,3 kΩ: Raimo teatel, mõõtmata. Allatõmme 4,7 kΩ: nimiväärtus. Op-amp ideaalne 0…5 V, LM358 neeldevoolu piirangut ei modelleeri."/>
+  <x x="16 352 300 352" f="0" si="12" te="Vref liugur 0,48 V (näide; B100K + 1 kΩ haru asendatud allikaga)"/>
+  <x x="432 432 700 432" f="0" si="12" te="Vin 0,40 V (õppejõu MPX5700AP näide)"/>
+  <x x="704 144 900 144" f="0" si="12" te="Vout (C26)"/>
+  <x x="784 224 900 224" f="0" si="12" te="G5"/>
+  <x x="320 208 460 208" f="0" si="12" te="Rref"/>
+  <x x="520 144 620 144" f="0" si="12" te="Rf"/>
+  <x x="320 368 440 368" f="0" si="12" te="4,7 kΩ"/>
+  <x x="680 224 760 224" f="0" si="12" te="3,3 kΩ"/>
+</cir>
