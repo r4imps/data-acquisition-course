@@ -16,7 +16,7 @@ logger=importlib.util.module_from_spec(spec); spec.loader.exec_module(logger)
 
 def args(port, path, append=False):
     values=["--port",port,"--config","raw","--csv",str(path),"--condition","atmosphere",
-            "--trial","1","--duration","10","--electrical-check-confirmed"]
+            "--trial","1","--duration","10","--no-dmm","--electrical-check-confirmed"]
     return values+["--append"] if append else values
 
 

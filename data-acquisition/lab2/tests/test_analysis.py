@@ -73,6 +73,17 @@ class AnalysisTests(unittest.TestCase):
             data = rows(); data[1][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError): self.load(data)
 
+    def test_floor_flag_uses_sidecar_thresholds(self):
+        data = rows(); data[3]["adc"] = 14; data[3]["adc_clipped"] = 1
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/"synthetic.csv"; write(path, data)
+            with self.assertRaises(ValueError): analyze.load([path])   # legacy 0/4095 rule
+            sidecar = Path(str(path)+".runs.jsonl")
+            record = json.loads(sidecar.read_text()); record.update(clip_low=50, clip_high=4045)
+            sidecar.write_text(json.dumps(record)+"\n")
+            run = analyze.load([path])[RUN]
+            self.assertEqual(analyze.clipped(run), 1)
+
     def test_missing_samples_rejected(self):
         data = rows(); del data[2]
         with self.assertRaises(ValueError): self.load(data)

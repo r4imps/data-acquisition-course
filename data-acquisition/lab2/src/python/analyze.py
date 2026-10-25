@@ -47,7 +47,9 @@ def load(paths):
                     raise ValueError("DMM value/timestamp must occur together")
                 meta = (row["config"], row["condition"], trial, dmm, row["dmm_recorded_utc"])
                 if run not in runs:
-                    runs[run] = dict(validator=Rows(row["config"], run), meta=meta,
+                    # Sidecar thresholds since the 25.10 logger fix; legacy runs flag only 0/4095.
+                    clip = (captures.get(run, {}).get("clip_low", 0), captures.get(run, {}).get("clip_high", 4095))
+                    runs[run] = dict(validator=Rows(row["config"], run, clip), meta=meta,
                                      t=[], adc=[], sources=[])
                 item = runs[run]
                 if item["meta"] != meta:
@@ -56,7 +58,7 @@ def load(paths):
                            config=row["config"], run=run, seq=int(row["seq"]), missed=int(row["missed"]))
                 checked = item["validator"].accept(obj)
                 if row["adc_clipped"] != str(checked["adc_clipped"]):
-                    raise ValueError("adc_clipped disagrees with ADC code")
+                    raise ValueError("adc_clipped disagrees with ADC code (missing .runs.jsonl sidecar with clip_low/clip_high?)")
                 item["t"].append(item["validator"].elapsed / 1000)
                 item["adc"].append(obj["adc"])
                 if str(path) not in item["sources"]:
@@ -69,6 +71,11 @@ def load(paths):
                                     capture.get("timing_ok") is True and not capture.get("error"))
         item["capture"] = capture or None
     return runs
+
+
+def clipped(item):
+    low, high = item["validator"].clip
+    return sum(v <= low or v >= high for v in item["adc"])
 
 
 def stats(values):
@@ -142,7 +149,7 @@ def compare(runs, pair, calibrated):
     for run, item, ix in zip((raw, opamp), (a, b), indices):
         clock = item["validator"]
         if (not item["capture_complete"] or not clock.summary()["timing_ok"] or
-                0 in item["adc"] or 4095 in item["adc"]):
+                clipped(item)):
             raise ValueError("spectra need valid timing and no clipped codes")
         gaps = clock.gaps
         if min(gaps) != max(gaps):
@@ -179,7 +186,7 @@ def main(argv=None):
             result = dict(config=config, condition=condition, trial=trial,
                           sources=item["sources"], timing=item["validator"].summary(),
                           capture_complete=item["capture_complete"], capture=item["capture"],
-                          adc=stats(item["adc"]), clipped_samples=sum(v in (0,4095) for v in item["adc"]),
+                          adc=stats(item["adc"]), clipped_samples=clipped(item),
                           dmm_reference_v=dmm or None, dmm_recorded_utc=recorded or None,
                           note="Whole-run variation is not plateau noise unless the run is stationary.")
             result["timing"]["target_hz"] = 100
