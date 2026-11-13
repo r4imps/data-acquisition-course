@@ -15,8 +15,7 @@ import statistics
 
 import mpx5700
 from analyze import spectrum
-
-CLIP_LOW, CLIP_HIGH = 50, 4045   # same defaults as logger.py
+from logger import CLIP_DEFAULT
 
 
 def load_csv(path, run=None):
@@ -209,7 +208,7 @@ def parse_args(argv=None):
         p.add_argument(f"--{name}-plateau", type=pair, metavar="START,END", help="seconds, default automatic")
         p.add_argument(f"--{name}-events", type=Path, help="default <csv stem>.events.csv")
     p.add_argument("--plateau-len", type=float, default=1.0, help="automatic plateau length, s")
-    p.add_argument("--clip-low", type=int, default=CLIP_LOW); p.add_argument("--clip-high", type=int, default=CLIP_HIGH)
+    p.add_argument("--clip-low", type=int, default=CLIP_DEFAULT[0]); p.add_argument("--clip-high", type=int, default=CLIP_DEFAULT[1])
     p.add_argument("--half-grip-kpa", type=float, help="team's discrimination threshold, kPa relative")
     p.add_argument("--half-grip-hold-ms", type=float, default=100)
     args = p.parse_args(argv)
