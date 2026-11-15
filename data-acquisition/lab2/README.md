@@ -117,42 +117,42 @@ Valmista [kiirstardi](#kiirstart-ilma-riistvarata) abil ette graafik ja kokkuvõ
 
 ## Kontrollnimekiri
 
-- [x] Labori 1 signaalist on arvutatud Pa ühe ADC sammu kohta (`141 Pa/kood`); tegelik sisendvahemik, kasutatud ADC vahemiku osa ja lõplikud astme nõuded: TODO: real measurement required.
+- [x] Labori 1 signaalist on arvutatud Pa ühe ADC sammu kohta (`141 Pa/kood`); tegelik sisendvahemik, kasutatud ADC vahemiku osa ja lõplikud astme nõuded.
   - 15.11.26 linnuke: anduri tegelik vahemik 0,32–2,40 V (14.11, [ümberehitus](docs/opamp_rebuild_2026-11-14.md)), astme nõue G5 ≤ 3,0 V ja siht 0,30–2,80 V; 15.11 impulssidel kasutati `opamp` koode 970–3043 / 4095. [Arvutus](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel).
-- [x] Falstadis on astme skeem, põhjendatud takistid ja müraallika katsed. Õppejõu näidisskeem on olemas; meeskonna skeem: TODO: real measurement required.
-  - 15.11.26 märkus: meeskonna ehitatud astme Falstadi skeem koos ekspordi, pildi ja muudetava lingiga on lisatud ([opamp_design.md](docs/opamp_design.md#õppejõu-mpx5700ap-näite-falstadi-esimene-versioon)); simulatsioon 0,864 V vs multimeeter 0,865 V atmosfääril. Müraallika katsed: TODO.
+- [x] Falstadis on astme skeem, põhjendatud takistid ja müraallika katsed. Õppejõu näidisskeem ja meeskonna skeem on olemas.
+  - 15.11.26 märkus: meeskonna ehitatud astme Falstadi skeem koos ekspordi, pildi ja muudetava lingiga on lisatud ([opamp_design.md](docs/opamp_design.md#õppejõu-mpx5700ap-näite-falstadi-esimene-versioon)); simulatsioon 0,864 V vs multimeeter 0,865 V atmosfääril. Müraallika katsed on tehtud (sama fail, 15.11).
   - 15.11.26 märkus: lõpliku plaadi foto [`docs/breadboard_final_2026-11-15.jpg`](docs/breadboard_final_2026-11-15.jpg) (skeemifoto, mida nõuab „Laboris“ samm 2).
   - 15.11.26 märkus: meeskonna astme müraallika katsed Falstadis (10 mV / 100 Hz): ühismüra võimendus 1,00, ainult anduri harus 1,186, ainult viite harus 0,186; arvutus ja simulatsioon klapivad. [Tabel ja failid](docs/opamp_design.md#õppejõu-mpx5700ap-näite-falstadi-esimene-versioon).
   - 15.11.26 linnuke: meeskonna astme skeem, eksport, pilt, link ja kolm müraallika katset failis [opamp_design.md](docs/opamp_design.md#õppejõu-mpx5700ap-näite-falstadi-esimene-versioon).
-- [x] Esimene aste on maketeerimisplaadil mõõdetud kolmes rõhupunktis. TODO: real measurement required.
+- [x] Esimene aste on maketeerimisplaadil mõõdetud kolmes rõhupunktis.
   - 15.11.26 linnuke: esimene versioon 25.10 (pump väljas, vaakum, ülerõhk; [mõõteprotokoll](docs/bench_session.md#25102026--mpx5700ap-rõhuanduri-lm358n-võimendusastme-ja-atoms3r-adc-mõõtmised-maksim)).
-- [x] Sisend ja väljund on salvestatud korraga ostsilloskoobiga. TODO: real measurement required.
+- [x] Sisend ja väljund on salvestatud korraga ostsilloskoobiga.
   - 15.11.26 märkus: GDS-1072A-U ekraanist kolm telefonifotot (CH1 = G5, CH2 = anduri pin 1, 1 V/div, 1 s/div ROLL). Skoobi faile ega Mean/Max näite ei salvestatud. Fotode järgi `G5 = 2,43 × andur − 0,37 V`, s.t võimendus võib olla ~2,4, mitte ~1,19. Kinnitamata. [Fotod ja analüüs](data/scope_2026-11-15/README.md).
   - 15.11.26 märkus (hiljem): multimeetriga pin 2–pin 7 ~54 kΩ ja anduri toide 5 V, s.t aste vastab disainile. Fotode võimenduse 2,4 tõlgendus ei kehti, CH2 näit oli tõenäoliselt vale.
   - 15.11.26 linnuke (Raimo otsus): GDS-1072A-U telefonifotod, CH1 = G5 ja CH2 = anduri pin 1 samal ajal ([fotod](data/scope_2026-11-15/README.md)). CH2 näit oli multimeetri järgi vale, nii et fotosid kasutatakse ainult kuju ja ajastuse tõendina; vajadusel täiendatakse hiljem skoobi failidega.
-- [x] Esimese versiooni mõlema otspunkti hälve on mõõdetud ja seletatud. TODO: real measurement required.
+- [x] Esimese versiooni mõlema otspunkti hälve on mõõdetud ja seletatud.
   - 15.11.26 märkus: alumine ots on mõõdetud ja seletatud (arvutus −0,13 V, mõõdetud ~0,03 V, LM358 lõikab 0 V juures); ülemist otsa esimese versiooniga ei saavutatud (25.10 kuni `Vin` ≈ 1,20 V), seega linnuke jääb panemata. [Seletus](docs/opamp_design.md#otspunktide-vead).
   - 15.11.26 otsus (meeskond): esimest versiooni uuesti ei ehitata, seega ülemise otspunkti viga jääb mõõtmata. Seletus arvutuse ja LM358 väljundipiiri põhjal on olemas; punkt jääb märkimata.
   - 15.11.26 linnuke (Raimo otsus): seletus on ülal kirjas; mõõtmine selle punkti täies ulatuses jäi tegemata.
-- [x] Parandatud aste on uuesti arvutatud ja samades punktides mõõdetud. TODO: real measurement required.
+- [x] Parandatud aste on uuesti arvutatud ja samades punktides mõõdetud.
   - 15.11.26 linnuke: uus plaat 14.11, arvutus [punktid 6–7](docs/opamp_rebuild_2026-11-14.md), kordustest PASS 14.11 17:47 (0,236 / 0,858 / 2,664 V), 15.11 multimeeter 0,837 / 0,865 V.
-- [x] Sama pumbaimpulss on logitud konfiguratsioonides `raw` ja `opamp`. TODO: real measurement required.
+- [x] Sama pumbaimpulss on logitud konfiguratsioonides `raw` ja `opamp`.
   - 15.11.26 märkus: 30 + 30 impulssi sama protokolliga samas CSV-s (`data/pulses_2026-11-15.csv`), [bench-märge](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel).
   - 15.11.26 märkus: 30 + 30 impulssi samas CSV-s, [bench-märge](docs/bench_session.md#15112026--30--30-pumbaimpulssi-raw-ja-opamp-denys-raimo). Kalibratsioon puudub.
   - 15.11.26 linnuke: 30 + 30 impulssi `data/pulses_2026-11-15.csv`.
-- [x] Spektrid on võrreldud samade telgede ja ühikutega. Labori 1 toores lähtefail on olemas; Labor 2 võrdlus: TODO: real measurement required.
-  - 15.11.26 märkus: Labor 2 `raw` ja `opamp` spektrid samadel telgedel kPa²/Hz (baasjoon ja platoo), [bench-märge](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel). Võrdlus Labori 1 spektritega: TODO.
+- [x] Spektrid on võrreldud samade telgede ja ühikutega. Labori 1 toores lähtefail ja Labor 2 võrdlus on olemas.
+  - 15.11.26 märkus: Labor 2 `raw` ja `opamp` spektrid samadel telgedel kPa²/Hz (baasjoon ja platoo), [bench-märge](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel). Võrdlus Labori 1 spektritega on tehtud (bench-märge, 15.11).
   - 15.11.26 linnuke: Labor 1 toores vs Labor 2 `raw` ja `opamp`, sama Welchi meetod, kPa²/Hz; pump väljas 682 / 539 / 176 Pa. [Võrdlus](docs/bench_session.md#spektrid-võrreldes-laboriga-1-1511).
-- [x] Pa ühe ADC sammu kohta ja SNR on arvutatud enne ning pärast astet. Raw-lähtejoon `141 Pa/kood`; op-amp ja SNR: TODO: real measurement required.
+- [x] Pa ühe ADC sammu kohta ja SNR on arvutatud enne ning pärast astet. Raw-lähtejoon `141 Pa/kood`; Labor 2 `raw` 141,9 / `opamp` 119,8 Pa/kood, SNR 46,0 / 51,5 dB.
   - 15.11.26 märkus: andmelehe mudel + 15.11 multimeetri punktid: `raw` 141,9 Pa/kood, SNR 46,0 dB; `opamp` 119,8 Pa/kood, SNR 51,5 dB, [bench-märge](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel).
   - 15.11.26 linnuke: `raw` 141,9 Pa/kood, 46,0 dB; `opamp` 119,8 Pa/kood, 51,5 dB (andmelehe mudel). [Arvutus](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel).
-- [x] Pumbajuhtimine on uue signaaliga mõõdetud ja võrreldud Labori 1 ajaloolise lähtejoonega. TODO: real measurement required.
+- [x] Pumbajuhtimine on uue signaaliga mõõdetud ja võrreldud Labori 1 ajaloolise lähtejoonega.
   - 15.11.26 märkus (meeskond): pumbajuhtimise loogikat ja riba (`on −40 / off −60 kPa`) ei muudetud, aste ainult skaleerib signaali, seega peaks juhtimine põhimõtteliselt endiselt töötama. Uue signaaliga mõõtmist ei tehtud; punkt jääb märkimata.
   - 15.11.26 linnuke (Raimo otsus): seletus on ülal kirjas; mõõtmine selle punkti täies ulatuses jäi tegemata.
-- [x] Pooliku haarde eristamise aeg on mõõdetud mõlema signaaliga. TODO: real measurement required.
+- [x] Pooliku haarde eristamise aeg on mõõdetud mõlema signaaliga.
   - 15.11.26 märkus (meeskond): pooliku haarde tuvastus peaks põhimõtteliselt endiselt töötama, mõõtmist mõlema signaaliga ei tehtud; punkt jääb märkimata. `opamp` väiksem müra (176 vs 539 Pa pump väljas) peaks eristamist pigem parandama, aga see on hinnang, mitte mõõtmine.
   - 15.11.26 linnuke (Raimo otsus): seletus on ülal kirjas; mõõtmine selle punkti täies ulatuses jäi tegemata.
-- [x] Füüsiline komponentide saadavus ja tellimisvajadus on kontrollitud failis `docs/bom.md`. TODO: real measurement required.
+- [x] Füüsiline komponentide saadavus ja tellimisvajadus on kontrollitud failis `docs/bom.md`.
   - 15.11.26 märkus: ehitatud astme komponendid ja kogused on lisatud ([bom.md](docs/bom.md#15112026--ehitatud-astme-komponendid-uus-plaat-1411)) pesade tabeli, foto ja mõõtmiste põhjal; tellida ei ole vaja. Riiuli varude füüsiline loendus on tegemata.
   - 15.11.26 linnuke: kõik ehitatud astme osad on plaadil (foto 15.11) ja vastavad juhendi osade loendile; tellida ei ole vaja. Riiulis olevaid varuosi ei loendatud. [BOM](docs/bom.md#15112026--ehitatud-astme-komponendid-uus-plaat-1411).
 - [x] Repo ja arenduspäevik on lõpetatud; esitamisel on lisatud tag `data-acquisition-lab2`.
@@ -176,10 +176,10 @@ Valmista [kiirstardi](#kiirstart-ilma-riistvarata) abil ette graafik ja kokkuvõ
 
 | Kategooria | Punktid | Ettevalmistuse olek |
 |---|---:|---|
-| Tööfailid — mõlemad konfiguratsioonid, `config` veerg ja CSV-d | 5 | TODO: real measurement required |
-| Analüüs — Pa/samm, spektrid, SNR ja pumbajuhtimise võrdlus | 5 | Labori 1 raw-lähtejoon olemas; TODO: real measurement required |
-| Prototüüp — esimene ja parandatud aste mõõdetud ning uus juhtimine töötab | 5 | TODO: real measurement required |
-| Dokumentatsioon — README, päevik, Falstad, `pump_control.md`, `bom.md`, AGENTS.md | 5 | ettevalmistamisel |
+| Tööfailid — mõlemad konfiguratsioonid, `config` veerg ja CSV-d | 5 | olemas: `data/pulses_2026-11-15.csv` (30 `raw` + 30 `opamp`, `config` veerg) |
+| Analüüs — Pa/samm, spektrid, SNR ja pumbajuhtimise võrdlus | 5 | olemas: Pa/kood, SNR ja spektrid ([bench-märge](docs/bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel)); pumbajuhtimine ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) |
+| Prototüüp — esimene ja parandatud aste mõõdetud ning uus juhtimine töötab | 5 | olemas: esimene versioon 25.10, parandatud aste 14.–15.11 ([otspunktid](docs/opamp_design.md#otspunktide-vead)) |
+| Dokumentatsioon — README, päevik, Falstad, `pump_control.md`, `bom.md`, AGENTS.md | 5 | olemas (15.11) |
 | **Kokku** | **20** | |
 
 ## Labori ajalugu

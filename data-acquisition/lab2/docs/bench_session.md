@@ -51,7 +51,7 @@ Mõõda alalispinget. Ühenda multimeetri must juhe enne punast juhet.
 
 | Mõõtmine | Must mõõteots | Punane mõõteots | Toetatud suurusjärk | Mõõdetud väärtus |
 |---|---|---|---|---|
-| Anduri toitepinge, V | Anduri GND viik või sama kinnitatud ühine maa | Anduri Vcc viik | Laboris 1 mõõdeti `5,00 V`; mõõda selle sessiooni väärtus uuesti | TODO: `V` |
+| Anduri toitepinge, V | Anduri GND viik või sama kinnitatud ühine maa | Anduri Vcc viik | Laboris 1 mõõdeti `5,00 V`; mõõda selle sessiooni väärtus uuesti | 5,0 V (15.11, uus plaat) |
 | LM358 toitepinge otse toiteviikude vahel, V | Täpse variandi andmelehe järgi op-ampi negatiivne toiteviik `V−` / GND | Täpse variandi andmelehe järgi op-ampi positiivne toiteviik `V+` | Ülesanne kasutab `5 V` eeldust; tegelik väärtus on teadmata | TODO: `V` |
 
 ## 3. Raw-anduri mõõtmised
@@ -60,9 +60,9 @@ Mõõda anduri `Vin` enne op-ampi ehitamist. Hoia must mõõteots anduri GND vii
 
 | Tööpunkt | Rõhuolukorra kirjeldus | Must mõõteots | Punane mõõteots | Toetatud suurusjärk | Mõõdetud `Vin` |
 |---|---|---|---|---|---|
-| Atmosfäär | TODO: toru avatud atmosfääri, pump väljas; kinnita tegelik olukord | Anduri GND / kinnitatud ühine maa | Anduri `Vout` | Laboris 1 mõõdeti atmosfääril `0,85 V` | TODO: `V` |
-| Täis imemine | TODO: kirjelda ühendus ja saavutatud rõhuolukord | Anduri GND / kinnitatud ühine maa | Anduri `Vout` | Õppejõu MPX5700AP näites umbes `0,40 V`; see ei ole meeskonna mõõtetulemus | TODO: `V` |
-| Täis puhumine | TODO: kirjelda ühendus ja saavutatud rõhuolukord | Anduri GND / kinnitatud ühine maa | Anduri `Vout` | Õppejõu MPX5700AP näites umbes `1,56 V`; see ei ole meeskonna mõõtetulemus | TODO: `V` |
+| Atmosfäär | toru avatud, pump väljas (14.11 andur eraldi; 15.11 plaadil) | Anduri GND / kinnitatud ühine maa | Anduri `Vout` | Laboris 1 mõõdeti atmosfääril `0,85 V` | 0,831 V (14.11), 0,837 V (15.11) |
+| Täis imemine | andur kompressori küljes, täis imemine (14.11, andur eraldi) | Anduri GND / kinnitatud ühine maa | Anduri `Vout` | Õppejõu MPX5700AP näites umbes `0,40 V`; see ei ole meeskonna mõõtetulemus | 0,32 V (14.11) |
+| Täis puhumine | andur kompressori küljes, täis puhumine (14.11, andur eraldi; 15.11 rida 22 multimeetriga) | Anduri GND / kinnitatud ühine maa | Anduri `Vout` | Õppejõu MPX5700AP näites umbes `1,56 V`; see ei ole meeskonna mõõtetulemus | 2,40 V (14.11); 2,43 V (15.11) |
 
 Märgi iga punkti juurde ka multimeetri vahemik ja näidu stabiilsus, kui näit kõigub. Ära kasuta ühe punkti hetkelist äärmust otspunktina ilma seda kirja panemata.
 
@@ -92,9 +92,9 @@ H. Ühenda ADC alles pärast seda, kui mõõdetud väljund jääb kogu töövahe
 
 | Tööpunkt | Must mõõteots | Punane mõõteots | Arvutatud `Vout`, V | Mõõdetud `Vout`, V | ADC-ga ühendamine lubatud? |
 |---|---|---|---:|---:|---|
-| Atmosfäär | Ühine maa | Op-ampi `Vout` | TODO: calculate after raw measurements | TODO | TODO: verify safe range |
-| Täis imemine | Ühine maa | Op-ampi `Vout` | TODO: calculate after raw measurements | TODO | TODO: verify safe range |
-| Täis puhumine | Ühine maa | Op-ampi `Vout` | TODO: calculate after raw measurements | TODO | TODO: verify safe range |
+| Atmosfäär | Ühine maa | Op-ampi `Vout` | 0,865 | 0,865 (G5, multimeeter 15.11) | jah, ≤ 3,0 V |
+| Täis imemine | Ühine maa | Op-ampi `Vout` | 0,252 | 0,236 (ADC, kordustest 14.11) | jah |
+| Täis puhumine | Ühine maa | Op-ampi `Vout` | 2,717 | 2,664 (ADC, kordustest 14.11); 15.11 tipp ~2,75 V | jah, ≤ 3,0 V |
 
 ## Send these numbers back for calculation
 
@@ -296,8 +296,7 @@ Kolm mõõteseeriat ei võimalda veel teha nõutavat sama protokolli `raw` ja `o
 - Pumbakast AUTO režiimis, robot 192.168.1.6, ainult DO-käsud, liikumist ei olnud. `raw` katse 17 kordus käis läbi mg400-base (`--mg400-url`).
 - Voolikus on väike leke, et rõhk langeks enne järgmist jooksu atmosfäärini.
 - `opamp`: G5 astme väljundil (A12→J60). `raw`: G5 otse anduri real 22 (A22→J60), USB lahti ühendatud juhtme vahetamise ajal.
-- Rea 22 pinge täis puhumisel multimeetriga enne `raw` ühendamist: TODO (tudeng).
-  - 15.11.26 täiendus (Raimo): rea 22 pinge täis puhumisel oli **2,43 V** (≤ 3,0 V, G5 ühendamine lubatud).
+- Rea 22 pinge täis puhumisel multimeetriga enne `raw` ühendamist: **2,43 V** (Raimo; ≤ 3,0 V, G5 ühendamine lubatud).
 
 ### Tulemused (ADC koodid, kalibreerimata)
 

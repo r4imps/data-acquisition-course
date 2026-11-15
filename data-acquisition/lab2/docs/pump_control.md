@@ -27,49 +27,49 @@ Labori 1 eraldi anduritestis oli raw-müra atmosfääril `4,84 LSB` ja passiivse
 
 | Väli | Raw | Opamp |
 |---|---|---|
-| CSV fail | Labori 1 ajalooliste failide skeem `t_ms,adc,p_kpa,pump`; Labor 2 raw: TODO: real measurement required | TODO: real measurement required |
+| CSV fail | Labori 1 ajalooliste failide skeem `t_ms,adc,p_kpa,pump`; Labor 2: `data/pulses_2026-11-15.csv` (`config=raw`) | `data/pulses_2026-11-15.csv` (`config=opamp`) |
 | `config` väärtus | `raw` | `opamp` |
-| Diskreetimissagedus (Hz) | Labor 1: `1002` rida / `10010 ms` ≈ `100,1 Hz`; Labor 2: TODO: real measurement required | TODO: real measurement required |
-| Anduri ja ADC konfiguratsioon | Labor 1: MPX5700AP otse AtomS3R G5-le, 12 bit, `ADC_11db`, kaheksa lugemi keskmine | MPX5700AP + op-amp; tegelik Labor 2 konfiguratsioon: TODO: real measurement required |
-| Katseprotokoll | TODO: real measurement required | TODO: real measurement required |
+| Diskreetimissagedus (Hz) | Labor 1: `1002` rida / `10010 ms` ≈ `100,1 Hz`; Labor 2: 100,0 Hz (1001 rida / 10 s, `missed=0`) | 100,0 Hz |
+| Anduri ja ADC konfiguratsioon | Labor 1: MPX5700AP otse AtomS3R G5-le, 12 bit, `ADC_11db`, kaheksa lugemi keskmine | MPX5700AP + LM358N (A 1,185, `Vref` ~0,69 V) + 3,3 kΩ / 0,1 µF → G5, 12 bit, `ADC_11db`, kaheksa lugemi keskmine |
+| Katseprotokoll | 15.11 `pulse_series.py`: 3 s väljas, 4 s puhumine, 3 s väljas, 30 jooksu | sama |
 
 ## Olukordade võrdlus
 
 | Olukord | Konfiguratsioon | Kontrollriba (kPa) | Minimaalne väljalülitusaeg (s) | Käivitused minutis | Märkused |
 |---|---|---:|---:|---:|---|
-| Napp klaasil | raw | Labor 1 ajalooline `on −40 / off −60`; Labor 2 kordus: TODO: real measurement required | Labor 1 ajalooline `15`; Labor 2 kordus: TODO: real measurement required | Labor 1 hoidmiskatses `0/min` `120 s` jooksul; Labor 2 kordus: TODO: real measurement required | Klaas oli õhus |
-| Napp klaasil | opamp | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required | |
-| Napp õhus | raw | Labor 1 ajalooline `on −40 / off −60`; Labor 2 kordus: TODO: real measurement required | Labor 1 ajalooline `15`; Labor 2 kordus: TODO: real measurement required | TODO: real measurement required | Labor 1 varasem katse ei kasutanud lõplikku Labor 2 protokolli |
-| Napp õhus | opamp | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required | |
-| Voolik korgiga | raw | Labor 1 ajalooline `on −40 / off −60`; Labor 2 kordus: TODO: real measurement required | Labor 1 ajalooline `15`; Labor 2 kordus: TODO: real measurement required | TODO: real measurement required | Labor 1 varasem katse ei kasutanud lõplikku Labor 2 protokolli |
-| Voolik korgiga | opamp | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required | |
-| Poolik haare | raw | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required | |
-| Poolik haare | opamp | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required | |
+| Napp klaasil | raw | Labor 1 ajalooline `on −40 / off −60`; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Labor 1 ajalooline `15`; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Labor 1 hoidmiskatses `0/min` `120 s` jooksul; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Klaas oli õhus |
+| Napp klaasil | opamp | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | |
+| Napp õhus | raw | Labor 1 ajalooline `on −40 / off −60`; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Labor 1 ajalooline `15`; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Labor 1 varasem katse ei kasutanud lõplikku Labor 2 protokolli |
+| Napp õhus | opamp | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | |
+| Voolik korgiga | raw | Labor 1 ajalooline `on −40 / off −60`; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Labor 1 ajalooline `15`; Labor 2: ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | Labor 1 varasem katse ei kasutanud lõplikku Labor 2 protokolli |
+| Voolik korgiga | opamp | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | |
+| Poolik haare | raw | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | |
+| Poolik haare | opamp | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) | |
 
 ## Lahutusvõime ja signaali kvaliteet
 
 | Näitaja | Raw | Opamp | Arvutus / allikas |
 |---|---:|---:|---|
-| Pa ühe ADC sammu kohta | Labor 1 arvutus `0,1405 kPa/kood = 141 Pa/kood`; Labor 2 kontroll: TODO: real measurement required | TODO: real measurement required | `q_P = q_V / S_P` koos vastava astme võimendusega |
-| Signaalitase (kPa) | TODO: real measurement required | TODO: real measurement required | sama Labor 2 impulsi platoo keskmine − baasjoone keskmine |
-| Platoo müra standardhälve (kPa) | TODO: real measurement required | TODO: real measurement required | sama ajavahemik ja ühikud; Labor 1 LSB-vaatlus ei asenda seda |
-| SNR (dB) | TODO: real measurement required | TODO: real measurement required | `20 · log10(|signal| / noise_std)` |
+| Pa ühe ADC sammu kohta | Labor 1 arvutus `0,1405 kPa/kood = 141 Pa/kood`; Labor 2: 141,9 Pa/kood | 119,8 Pa/kood | `q_P = q_V / S_P` koos vastava astme võimendusega |
+| Signaalitase (kPa) | 242,8 | 242,6 | sama Labor 2 impulsi platoo keskmine − baasjoone keskmine |
+| Platoo müra standardhälve (kPa) | 1,387 | 0,681 | sama ajavahemik ja ühikud; Labor 1 LSB-vaatlus ei asenda seda |
+| SNR (dB) | 46,0 | 51,5 | `20 · log10(|signal| / noise_std)` |
 
 - 15.11.26 märkus (andmelehe mudel, 30 + 30 impulssi, puhumine 4 s): Pa/kood `raw` 141,9 / `opamp` 119,8; impulsi suurus 242,8 / 242,6 kPa; platoo müra 1387 / 681 Pa; SNR 46,0 / 51,5 dB. [Arvutus](bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel). Pumbajuhtimise olukorrad (klaas, õhk, kork, poolik haare) on mõõtmata.
 
 ## Pooliku haarde eristamine
 
-Laboris 1 poolikut haaret ei mõõdetud. Eristamise kriteerium ja läviväärtus: TODO: real measurement required.
+Laboris 1 poolikut haaret ei mõõdetud. Eristamise kriteerium ja läviväärtus: Laboris 2 ei mõõdetud (Raimo otsus 15.11).
 
 | Konfiguratsioon | Eristamise aeg (s) | Algushetke määratlus | Meetod |
 |---|---:|---|---|
-| Raw | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required |
-| Opamp | TODO: real measurement required | TODO: real measurement required | TODO: real measurement required |
+| Raw | — | — | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) |
+| Opamp | — | — | ei mõõdetud (Raimo otsus 15.11: juhtimisloogika ja riba ei muutunud) |
 
 ## Järeldus
 
-- Kas kontrollriba muutus: TODO: real measurement required.
-- Kas käivituste arv muutus: TODO: real measurement required.
-- Kas lahutusvõime või SNR paranes: TODO: real measurement required.
-- Kas poolik haare eristus varem: TODO: real measurement required.
-- Kas aste oli põhjendatud: TODO: real measurement required.
+- Kas kontrollriba muutus: ei, riba `on −40 / off −60 kPa` jäi samaks (aste ainult skaleerib signaali).
+- Kas käivituste arv muutus: uue signaaliga ei mõõdetud (Raimo otsus 15.11).
+- Kas lahutusvõime või SNR paranes: jah — 141,9 → 119,8 Pa/kood, müra pump väljas 539 → 176 Pa, SNR 46,0 → 51,5 dB ([arvutus](bench_session.md#kalibratsioon-pa-adc-samm-snr-ja-spektrid-1511-andmelehe-mudel)).
+- Kas poolik haare eristus varem: ei mõõdetud; väiksem müra peaks eristamist pigem parandama (hinnang).
+- Kas aste oli põhjendatud: jah — peenem samm, ~3× väiksem müra ja ~5,5 dB parem SNR; G5 jäi ≤ 3,0 V.
